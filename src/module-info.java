@@ -3,5 +3,5 @@ module Game2048 {
     requires javafx.fxml;
     requires java.xml;
 
-    opens sample;
+    opens Game2048;
 }
