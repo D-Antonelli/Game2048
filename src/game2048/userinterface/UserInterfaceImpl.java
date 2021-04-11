@@ -1,11 +1,19 @@
-package userinterface;
+package game2048.userinterface;
 
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import Game2048.Coordinates;
+import game2048.Coordinates;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,10 +103,27 @@ public class UserInterfaceImpl {
     }
 
     public void setTileColor(int x, int y, Color newColor) {
-        if(x < TILE -1 && y < TILE -1) {
             Rectangle tile = tiles.get(new Coordinates(x, y));
-            tile.setFill(newColor);
-        }
+            if(tile != null) {
+                tile.setFill(newColor);
+            }
     }
 
+    public void setTileValueEx(int x, int y, Color tileColor, String value) {
+        Rectangle tile = tiles.get(new Coordinates(x, y));
+        if(tile != null && !value.isEmpty()) {
+            tile.setFill(tileColor);
+            Text number = new Text(value);
+            number.setFont(Font.font("Segoe UI Black"));
+            number.setFill(Color.WHITE);
+            final double width = number.getLayoutBounds().getWidth();
+            double deltaX = tile.getX() + (TILE_WIDTH_HEIGHT/2 - width/2);
+            double deltaY = tile.getY() + (TILE_WIDTH_HEIGHT/2);
+            number.setScaleX(4);
+            number.setScaleY(4);
+            number.setX(deltaX);
+            number.setY(deltaY);
+            group.getChildren().add(number);
+        }
+    }
 }

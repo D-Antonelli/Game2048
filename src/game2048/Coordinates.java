@@ -1,4 +1,4 @@
-package Game2048;
+package game2048;
 
 import java.util.Objects;
 

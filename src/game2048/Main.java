@@ -1,9 +1,8 @@
-package Game2048;
+package game2048;
 
 import javafx.application.Application;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import userinterface.UserInterfaceImpl;
+import game2048.userinterface.UserInterfaceImpl;
 
 
 public class Main extends Application {

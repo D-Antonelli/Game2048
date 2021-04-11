@@ -2,6 +2,8 @@ module Game2048 {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.xml;
+    requires junit;
+    requires org.junit.jupiter.api;
 
-    opens Game2048;
+    opens game2048;
 }
