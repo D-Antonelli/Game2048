@@ -1,17 +1,11 @@
 package game2048.userinterface;
-
-import javafx.geometry.Pos;
+import game2048.TextField;
 import javafx.scene.Group;
+
+
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import game2048.Coordinates;
 
@@ -40,12 +34,18 @@ public class UserInterfaceImpl {
     private static double TILE_WIDTH_HEIGHT;
 
     private static final Map<Coordinates, Rectangle> tiles = new HashMap<>();
+    private static final Map<Rectangle, TextField> filledTiles = new HashMap<>();
 
     public UserInterfaceImpl() {
         this.stage = new Stage();
         group = new Group();
         initializeUserInterface();
     }
+
+    public Stage getStage() {
+        return stage;
+    }
+
 
     public void setTileLayout(int tiles) {
         UserInterfaceImpl.TILE = tiles;
@@ -66,13 +66,13 @@ public class UserInterfaceImpl {
     }
 
     private void drawBoard(Group group) {
-        Rectangle board = new Rectangle();
-        board.setWidth(BOARD_SIDES);
-        board.setHeight(BOARD_SIDES);
-        board.setX(BOARD_PADDING_X);
-        board.setY(BOARD_PADDING_Y);
-        board.setFill(BOARD_BACKGROUND_COLOR);
-        group.getChildren().add(board);
+        Rectangle rectBoard = new Rectangle();
+        rectBoard.setWidth(BOARD_SIDES);
+        rectBoard.setHeight(BOARD_SIDES);
+        rectBoard.setX(BOARD_PADDING_X);
+        rectBoard.setY(BOARD_PADDING_Y);
+        rectBoard.setFill(BOARD_BACKGROUND_COLOR);
+        group.getChildren().add(rectBoard);
     }
 
     private void drawTiles(Group group) {
@@ -111,19 +111,29 @@ public class UserInterfaceImpl {
 
     public void setTileValueEx(int x, int y, Color tileColor, String value) {
         Rectangle tile = tiles.get(new Coordinates(x, y));
-        if(tile != null && !value.isEmpty()) {
-            tile.setFill(tileColor);
-            Text number = new Text(value);
-            number.setFont(Font.font("Segoe UI Black"));
-            number.setFill(Color.WHITE);
-            final double width = number.getLayoutBounds().getWidth();
-            double deltaX = tile.getX() + (TILE_WIDTH_HEIGHT/2 - width/2);
-            double deltaY = tile.getY() + (TILE_WIDTH_HEIGHT/2);
-            number.setScaleX(4);
-            number.setScaleY(4);
-            number.setX(deltaX);
-            number.setY(deltaY);
-            group.getChildren().add(number);
+
+        //fill
+        if (!value.isEmpty() && !filledTiles.containsKey(tile)) {
+            TextField textField = new TextField(tile, value);
+            textField.draw(group);
+            textField.fillBackground(tileColor);
+            filledTiles.put(tile, textField);
         }
+
+        //change
+        else if(!value.isEmpty() && filledTiles.containsKey(tile)) {
+            TextField field = filledTiles.get(tile);
+            field.fillBackground(tileColor);
+            field.setText(value);
+        }
+
+        //empty
+        else if(value.isEmpty() && filledTiles.containsKey(tile)) {
+            TextField field = filledTiles.get(tile);
+            field.remove(group);
+            filledTiles.remove(tile);
+            tile.setFill(TILE_COLOR);
+        }
+
     }
 }
