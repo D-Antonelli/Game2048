@@ -35,6 +35,11 @@ public class TextField {
         text.setText(value);
     }
 
+    public void setSize(double size) {
+        text.setScaleX(size);
+        text.setScaleY(size);
+    }
+
     private void style() {
         text.setScaleX(4);
         text.setScaleY(4);

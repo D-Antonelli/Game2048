@@ -13,6 +13,7 @@ public class Game2048 {
     private static boolean isGameStopped = false;
     private static int[][] gameField = new int[SIDE][SIDE];
     private static UserInterfaceImpl UI;
+    private static int score = 0;
 
     public static void initialize(UserInterfaceImpl newUI) {
         UI = newUI;
@@ -28,6 +29,19 @@ public class Game2048 {
 
     private static void onKeyPress(KeyEvent e) {
         String key = e.getCode().getName().toUpperCase();
+        if(isGameStopped && !key.equals("SPACE")) {
+            return;
+        }
+        else if(isGameStopped) {
+            isGameStopped = false;
+            createGame();
+            drawScene();
+            return;
+        }
+        else if(!canUserMove()) {
+            gameOver();
+            return;
+        }
 
         switch (key) {
             case "LEFT":
@@ -49,12 +63,13 @@ public class Game2048 {
             default:
                 break;
         }
-
         drawScene();
-
     }
 
     private static void createGame() {
+        gameField = new int[SIDE][SIDE];
+        score = 0;
+        UI.drawScore(score);
         createNewNumber();
         createNewNumber();
     }
@@ -126,6 +141,27 @@ public class Game2048 {
         } while (!isCreated);
     }
 
+    private static boolean canUserMove() {
+        for (int y = 0; y < SIDE; y++) {
+            for (int x = 0; x < SIDE; x++) {
+                if (gameField[y][x] == 0) {
+                    return true;
+                } else if (y < SIDE - 1 && gameField[y][x] == gameField[y + 1][x]) {
+                    return true;
+                } else if ((x < SIDE - 1) && gameField[y][x] == gameField[y][x + 1]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static void gameOver() {
+        isGameStopped = true;
+        //UI.showMessageDialog(Color.YELLOW, "GAME OVER", Color.RED, 18);
+    }
+
+
     private static void setCellColoredNumber(int x, int y, int value) {
         Color color = Utilities.getColorByValue(value);
         if (value == 0) {
@@ -158,6 +194,8 @@ public class Game2048 {
             if (row[i] != 0 || row[pointer] != 0) {
                 if (row[i] == row[pointer]) {
                     row[i] += row[pointer];
+                    score += row[i];
+                    UI.drawScore(score);
                     row[pointer] = 0;
                     result = true;
                 }

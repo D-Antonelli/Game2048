@@ -5,6 +5,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import game2048.problemdomain.Coordinates;
 
@@ -55,6 +57,7 @@ public class UserInterfaceImpl {
     public void initializeUserInterface() {
         drawBackground(group);
         drawBoard(group);
+        drawScore(0);
         stage.show();
     }
 
@@ -73,6 +76,20 @@ public class UserInterfaceImpl {
         rectBoard.setFill(BOARD_BACKGROUND_COLOR);
         group.getChildren().add(rectBoard);
     }
+
+    public void drawScore(int score) {
+       Rectangle scoreWrapper = new Rectangle();
+       scoreWrapper.setWidth(170);
+       scoreWrapper.setHeight(80);
+       scoreWrapper.setFill(Color.rgb(187,173,160));
+       scoreWrapper.setX(BOARD_PADDING_X);
+       scoreWrapper.setY(50);
+       group.getChildren().add(scoreWrapper);
+       TextField textField = new TextField(scoreWrapper, "SCORE: "+score);
+       textField.setSize(2);
+       textField.draw(group);
+    }
+
 
     private void drawTiles(Group group) {
         double TILE_X = BOARD_PADDING_X;
