@@ -1,8 +1,7 @@
-package game2048.computationlogic;
+package game2048.logic;
 
 
 import javafx.scene.paint.Color;
-import java.util.Arrays;
 
 public class Utilities {
 

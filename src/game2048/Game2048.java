@@ -2,30 +2,24 @@ package game2048;
 
 
 import game2048.userinterface.UserInterfaceImpl;
-import game2048.computationlogic.Utilities;
+import game2048.logic.Utilities;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.junit.Assert;
-import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
 
 
 public class Game2048 {
-
     private static final int SIDE = 4;
-    private static final int[][] gameField = new int[SIDE][SIDE];
+    private static boolean isGameStopped = false;
+    private static int[][] gameField = new int[SIDE][SIDE];
     private static UserInterfaceImpl UI;
-    private static Stage stage;
 
     public static void initialize(UserInterfaceImpl newUI) {
         UI = newUI;
         UI.setTileLayout(SIDE);
-        stage = UI.getStage();
         createGame();
         drawScene();
-        handleKeyEvent(stage);
+        handleKeyEvent(UI.getStage());
     }
 
     public static void handleKeyEvent(Stage stage) {
@@ -93,18 +87,34 @@ public class Game2048 {
     }
 
     private static void moveRight() {
-
+        rotateClockwise();
+        rotateClockwise();
+        moveLeft();
+        rotateClockwise();
+        rotateClockwise();
     }
 
     private static void moveUp() {
-
+        rotateClockwise();
+        rotateClockwise();
+        rotateClockwise();
+        moveLeft();
+        rotateClockwise();
     }
 
     private static void moveDown() {
-
+        rotateClockwise();
+        moveLeft();
+        rotateClockwise();
+        rotateClockwise();
+        rotateClockwise();
     }
 
     private static void createNewNumber() {
+        int max = getMaxTileValue();
+        if(max == 2048) {
+            win();
+        }
         int x = Utilities.getRandomNumber(SIDE);
         int y = Utilities.getRandomNumber(SIDE);
         boolean isCreated = false;
@@ -139,7 +149,6 @@ public class Game2048 {
             }
         }
         return isCompressed;
-
     }
 
     private static boolean mergeRow(int[] row) {
@@ -158,28 +167,34 @@ public class Game2048 {
         return result;
     }
 
-    @Test
-    void mergeRow() {
-        boolean result = mergeRow(new int[]{4, 4, 0, 0});
-        Assert.assertTrue(result);
-
-        result = mergeRow(new int[]{2, 2, 2, 2});
-        Assert.assertTrue(result);
-
-        result = mergeRow(new int[]{4, 2, 2, 0});
-        Assert.assertTrue(result);
-
-        result = mergeRow(new int[]{0, 2, 2, 0});
-        Assert.assertTrue(result);
-
-        result = mergeRow(new int[]{0, 2, 2, 2});
-        Assert.assertTrue(result);
-
-        result = mergeRow(new int[]{4, 0, 4, 0});
-        Assert.assertFalse(result);
-
-        result = mergeRow(new int[]{0, 0, 0, 0});
-        Assert.assertFalse(result);
+    private static void rotateClockwise() {
+        int[][] result = new int[SIDE][SIDE];
+        int lastCol = result.length -1;
+        for(int[] row: gameField) {
+            for(int i=0; i < row.length; i++) {
+                result[i][lastCol] = row[i];
+            }
+            lastCol--;
+        }
+        gameField = result;
     }
+
+    private static int getMaxTileValue() {
+        int max = 0;
+        for(int[] row: gameField) {
+            for (int value : row) {
+                if (value > max) {
+                    max = value;
+                }
+            }
+        }
+        return max;
+        }
+
+    private static void win() {
+        isGameStopped = true;
+        //UI.showMessageDialog(Color.YELLOW, "CONGRATULATIONS, YOU WON!", Color.RED, 18);
+    }
+
 }
 

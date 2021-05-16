@@ -1,5 +1,4 @@
 package game2048.userinterface;
-import game2048.TextField;
 import javafx.scene.Group;
 
 
@@ -7,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import game2048.Coordinates;
+import game2048.problemdomain.Coordinates;
 
 import java.util.HashMap;
 import java.util.Map;

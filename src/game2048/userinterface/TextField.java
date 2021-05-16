@@ -1,4 +1,4 @@
-package game2048;
+package game2048.userinterface;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
 public class TextField {
     private final Rectangle tile;
     private final Text text;
-    final double width;
+    private final double width;
 
     public TextField(Rectangle tile, String value) {
         this.tile = tile;

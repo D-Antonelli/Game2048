@@ -1,4 +1,4 @@
-package game2048.computationlogic;
+package game2048.logic;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

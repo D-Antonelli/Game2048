@@ -1,4 +1,4 @@
-package game2048;
+package game2048.problemdomain;
 
 import java.util.Objects;
 
